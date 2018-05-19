@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <sys/time.h>
 #include <vector>
 
 using namespace std;
@@ -33,15 +34,19 @@ int main(int argc, char * argv[])
 	// Warning: no format check
 	int N = atoi(argv[1]);
 
-	clock_t start, end;
+	struct timespec start, end;
+	//clock_t start, end;
 
-	start = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
+	//start = clock();
 	int count = count_primes(N);
-	end = clock();
+	//end = clock();
+	clock_gettime(CLOCK_MONOTONIC, &end);
 
 	cout << "Number: " << N << endl;
 	cout << "Number of primes: " << count << endl;
-	cout << "Time cost: " << (double)(end - start)/CLOCKS_PER_SEC << endl;
+	//cout << "Time cost: " << (double)(end - start)/CLOCKS_PER_SEC << endl;
+	cout << "Time cost: " << (end.tv_sec - start.tv_sec) + (double)(end.tv_nsec - start.tv_nsec)/1000000000 << endl;
 
 	return 0;
 }
